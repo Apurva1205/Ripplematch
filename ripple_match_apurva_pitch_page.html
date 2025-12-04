@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apurva × RippleMatch / Rockwell – Data Science Analyst Intern</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      background: radial-gradient(circle at top left, #0f172a 0, #020617 50%, #000 100%);
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; width: 100%; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      padding: 28px 22px;
+      background: radial-gradient(circle at top, #1d4ed8 0, #020617 55%);
+      border-right: 1px solid rgba(30,64,175,0.5);
+      box-shadow: 8px 0 40px rgba(15,23,42,0.9);
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 26px;
+    }
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .brand-sub {
+      font-size: 0.78rem;
+      color: #cbd5f5;
+    }
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      border: 2px solid rgba(191,219,254,0.9);
+      background: radial-gradient(circle at 20% 0, #38bdf8, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #eff6ff;
+      margin-bottom: 10px;
+    }
+    .sidebar-name { font-weight: 600; font-size: 1rem; }
+    .sidebar-role { font-size: 0.86rem; color: #bfdbfe; }
+
+    .nav {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+    }
+    .nav a {
+      padding: 6px 0;
+      color: #dbeafe;
+      opacity: 0.75;
+    }
+    .nav a span {
+      border-bottom: 1px dashed rgba(191,219,254,0.5);
+      padding-bottom: 3px;
+    }
+    .nav a:hover { opacity: 1; }
+
+    .sidebar-meta {
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: #cbd5f5;
+    }
+    .pill-row { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(191,219,254,0.7);
+      font-size: 0.74rem;
+      background: rgba(15,23,42,0.4);
+    }
+
+    /* Main */
+    .main {
+      padding: 28px 24px 40px;
+      max-width: 960px;
+      width: 100%;
+    }
+    @media (min-width: 1100px) { .main { margin: 0 auto; } }
+
+    .hero {
+      margin-bottom: 26px;
+      border-radius: 18px;
+      border: 1px solid rgba(37,99,235,0.7);
+      padding: 18px 18px 20px;
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(37,99,235,0.35), transparent 60%),
+        rgba(15,23,42,0.96);
+      box-shadow: 0 24px 70px rgba(15,23,42,0.9);
+    }
+    .eyebrow {
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .hero-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #f9fafb;
+      margin-bottom: 6px;
+    }
+    @media (min-width: 768px) { .hero-title { font-size: 2rem; } }
+    .hero-gradient {
+      background: linear-gradient(120deg,#38bdf8,#a855f7,#f97316);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-tagline {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      max-width: 640px;
+    }
+    .hero-footer {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #bfdbfe;
+    }
+    .hero-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(129,140,248,0.8);
+      background: rgba(15,23,42,0.7);
+    }
+
+    /* Sections with vertical color stripe */
+    .section {
+      position: relative;
+      margin-bottom: 18px;
+      padding: 16px 18px 18px 22px;
+      border-radius: 16px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,23,42,0.98));
+      overflow: hidden;
+    }
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(120deg,rgba(56,189,248,0.18),transparent 45%),
+        linear-gradient(300deg,rgba(59,130,246,0.13),transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .section-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 4px minmax(0,1fr); column-gap: 14px; }
+    .section-stripe {
+      border-radius: 999px;
+      background: linear-gradient(180deg,#38bdf8,#6366f1,#f97316);
+      margin-top: 2px;
+    }
+    .section-body h2 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .section-body p { font-size: 0.9rem; color: #d1d5db; margin-bottom: 4px; }
+    .section-body ul { margin-left: 18px; margin-top: 4px; }
+    .section-body li { font-size: 0.88rem; color: #e5e7eb; margin-bottom: 4px; }
+    .section-body small { font-size: 0.78rem; color: #9ca3af; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .badge-soft {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      font-size: 0.76rem;
+      color: #e5e7eb;
+      background: rgba(15,23,42,0.9);
+    }
+
+    /* Split row for skills */
+    .split-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 10px; margin-top: 6px; }
+    .split-card {
+      border-radius: 12px;
+      border: 1px dashed rgba(75,85,99,0.9);
+      padding: 8px 10px;
+      font-size: 0.83rem;
+      background: radial-gradient(circle at top,rgba(30,64,175,0.3),rgba(15,23,42,0.96));
+    }
+
+    .timeline-item { margin-top: 6px; }
+    .timeline-role { font-size: 0.9rem; font-weight: 600; }
+    .timeline-meta { font-size: 0.78rem; color: #9ca3af; margin-bottom: 3px; }
+
+    .cta {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      color: #9ca3af;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(75,85,99,0.9);
+    }
+    .cta-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn-primary {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 600;
+      background: linear-gradient(120deg,#38bdf8,#a855f7);
+      color: #020617;
+      box-shadow: 0 14px 35px rgba(56,189,248,0.5);
+    }
+    .btn-secondary {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      cursor: pointer;
+      font-size: 0.82rem;
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+    }
+
+    footer {
+      margin-top: 16px;
+      text-align: right;
+      font-size: 0.76rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-title">RIPPLEMATCH × ROCKWELL</div>
+        <div class="brand-sub">Data Science Analyst Intern · Summer</div>
+      </div>
+      <div class="avatar">AC</div>
+      <div class="sidebar-name">Apurva Ravikar Chavan</div>
+      <div class="sidebar-role">Data Scientist · ML Engineer</div>
+
+      <nav class="nav">
+        <a href="#why"><span>Why this role</span></a>
+        <a href="#fit"><span>How I&apos;m a fit</span></a>
+        <a href="#experience"><span>Relevant experience</span></a>
+        <a href="#skills"><span>Tools & skills</span></a>
+      </nav>
+
+      <div class="sidebar-meta">
+        <div><strong>Location:</strong> United States (Remote‑ready)</div>
+        <div><strong>Focus:</strong> Data science, ML, and digital transformation</div>
+        <div class="pill-row">
+          <span class="pill">Forecasting</span>
+          <span class="pill">IoT & time series</span>
+          <span class="pill">NLP / Vision AI</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="eyebrow">Personal pitch · Data Science Analyst Intern</div>
+        <h1 class="hero-title">
+          Turning <span class="hero-gradient">complex data into clear decisions</span> for Rockwell clients
+        </h1>
+        <p class="hero-tagline">
+          I&apos;m excited about the Rockwell Automation Data Science Analyst Internship because it blends
+          consulting, advanced analytics, and real‑world impact across industries—exactly where I like to work.
+          I enjoy taking messy datasets, building models around forecasting, risk, and behavior, and then
+          translating the results into decisions that non‑technical stakeholders can trust.
+        </p>
+        <div class="hero-footer">
+          <span class="hero-chip">Data science & ML</span>
+          <span class="hero-chip">Client‑facing problem solving</span>
+          <span class="hero-chip">Digital transformation & IoT</span>
+        </div>
+      </section>
+
+      <section class="section" id="why">
+        <div class="section-inner">
+          <div class="section-stripe"></div>
+          <div class="section-body">
+            <h2>Why this internship interests me</h2>
+            <p>
+              This role is the perfect blend of <strong>analytics, engineering, and consulting</strong>. I&apos;m drawn to:
+            </p>
+            <ul>
+              <li>
+                The chance to work on <strong>forecasting, risk analysis, customer behavior, and predictive
+                maintenance</strong> problems across multiple industries.
+              </li>
+              <li>
+                The opportunity to contribute to <strong>IoT and Digital Data Science</strong>—turning time series
+                sensor streams and operational data into insights that optimize manufacturing and supply chains.
+              </li>
+              <li>
+                A consulting environment where data scientists don&apos;t just build models, but also
+                <strong>present results, influence decisions, and shape strategy</strong> with clients.
+              </li>
+            </ul>
+            <small>
+              I like work where the output is not just a dashboard or notebook, but a real change in how a client
+              operates day‑to‑day.
+            </small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="fit">
+        <div class="section-inner">
+          <div class="section-stripe"></div>
+          <div class="section-body">
+            <h2>How I&apos;m a strong fit</h2>
+            <p>
+              Even though I&apos;m beyond the typical &quot;first internship&quot; stage, my background lines up closely with the
+              problems this internship tackles:
+            </p>
+            <ul>
+              <li>
+                <strong>Hands‑on ML & modeling:</strong> I&apos;ve built forecasting models (ARIMA, LSTM) for energy
+                demand, classification models for language and image tasks, and similarity systems for matching
+                resumes to jobs.
+              </li>
+              <li>
+                <strong>End‑to‑end pipelines:</strong> I&apos;m comfortable doing everything from data cleaning and
+                feature engineering to deployment and monitoring, using Python, SQL, and modern ML frameworks.
+              </li>
+              <li>
+                <strong>Communication:</strong> I&apos;ve presented results to non‑technical stakeholders and written
+                reports and slide decks that explain complex models in simple terms—skills that map directly to
+                client‑facing consulting.
+              </li>
+              <li>
+                <strong>Curiosity & breadth:</strong> The internship spans forecasting, risk, customer behavior,
+                NLP/NLG, and Vision AI. My project work already touches many of these areas, so I can ramp up quickly
+                and explore whichever domain is most useful to the team.
+              </li>
+            </ul>
+            <div class="badge-row">
+              <span class="badge-soft">Python · PyTorch · scikit‑learn</span>
+              <span class="badge-soft">EDA & feature engineering</span>
+              <span class="badge-soft">Storytelling with data</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience">
+        <div class="section-inner">
+          <div class="section-stripe"></div>
+          <div class="section-body">
+            <h2>Relevant experience & projects</h2>
+            <div class="timeline-item">
+              <div class="timeline-role">AI / Data Scientist Intern · Ideatrix / Mental Model Algorithms</div>
+              <div class="timeline-meta">Multi‑agent systems · LLMs · behavioral analytics</div>
+              <p>
+                Designed reasoning pipelines for multi‑agent games using large language models and telemetry data.
+                This work strengthened my skills in experimentation, model evaluation, and turning complex behavior
+                into measurable metrics—similar to analyzing user journeys and performance in industrial systems.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-role">Energy Load Forecasting Project</div>
+              <div class="timeline-meta">Time series · ARIMA & LSTM · deployment‑ready</div>
+              <p>
+                Built and compared ARIMA and LSTM models to forecast regional utility loads, performing thorough
+                EDA, feature engineering (calendar & weather features), and model evaluation. This is directly
+                relevant to Rockwell&apos;s interest in forecasting, asset efficiency, and time‑series modeling.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-role">AI Resume Enhancer</div>
+              <div class="timeline-meta">NLP · embeddings · scoring engine</div>
+              <p>
+                Developed a system that parses resumes and job descriptions, computes embeddings, and scores
+                matches. This project sharpened my skills in NLP, similarity search, and creating data products that
+                provide clear, ranked recommendations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="skills">
+        <div class="section-inner">
+          <div class="section-stripe"></div>
+          <div class="section-body">
+            <h2>Tools & skills I&apos;d bring</h2>
+            <p>Mapped to the internship description:</p>
+            <div class="split-row">
+              <div class="split-card">
+                <strong>Modeling & analytics</strong>
+                <ul>
+                  <li>Regression, classification, and clustering</li>
+                  <li>Time series (ARIMA, LSTM)</li>
+                  <li>Risk & anomaly‑style modeling</li>
+                  <li>Evaluation, cross‑validation, benchmarking</li>
+                </ul>
+              </div>
+              <div class="split-card">
+                <strong>Tech stack</strong>
+                <ul>
+                  <li>Python, R (working knowledge)</li>
+                  <li>PyTorch, scikit‑learn, pandas, NumPy</li>
+                  <li>SQL (PostgreSQL / MySQL)</li>
+                  <li>Dashboards: basic Tableau / plotting</li>
+                </ul>
+              </div>
+              <div class="split-card">
+                <strong>Consulting & delivery</strong>
+                <ul>
+                  <li>Structuring analyses around business questions</li>
+                  <li>Communicating results to non‑technical teams</li>
+                  <li>Working collaboratively in fast‑paced environments</li>
+                  <li>Documenting methods and assumptions clearly</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta">
+        <div>
+          I&apos;d love the opportunity to contribute to Rockwell&apos;s Digital Data Science & IoT initiatives—whether that&apos;s
+          forecasting, risk analysis, or building scalable tools for large‑volume data—and to grow as a data science
+          consultant through client‑facing work.
+        </div>
+        <div class="cta-buttons">
+          <button class="btn-primary">Let&apos;s Talk</button>
+          <button class="btn-secondary">View full resume</button>
+        </div>
+      </div>
+
+      <footer>
+        Tailored pitch page for RippleMatch / Rockwell Data Science Analyst Internship · Apurva Ravikar Chavan
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
